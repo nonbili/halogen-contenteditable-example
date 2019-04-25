@@ -142,7 +142,7 @@ render state =
     ]
   , HH.div
     [ class_ "border p-3 overflow-y-auto"
-    , style "max-height: 60vh"
+    , style "min-height: 4rem; max-height: 60vh"
     , HH.attr (HH.AttrName "contenteditable") ""
     , HP.ref editorRef
     ]
