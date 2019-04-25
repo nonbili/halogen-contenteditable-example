@@ -21,6 +21,7 @@ jobs:
             yarn add --dev bower purescript pulp
             yarn
             yarn build
+            git checkout -- package.json
 
       - save_cache:
           paths:
