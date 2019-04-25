@@ -2,7 +2,7 @@
   "private": true,
   "license": "BSD-3-Clause",
   "scripts": {
-    "build": "pulp build -I -- +RTS -N2 -RTS && webpack --mode production --progress",
+    "build": "pulp build -- +RTS -N2 -RTS && webpack --mode production --progress",
     "postinstall": "bower install",
     "pscid:build": "pulp build",
     "start": "webpack-dev-server --mode development --progress"
