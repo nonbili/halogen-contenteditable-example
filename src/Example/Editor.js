@@ -10,6 +10,14 @@ exports.getSelectionRect_ = function(el) {
   }
 };
 
+exports.isSelectionLink = function() {
+  var sel = window.getSelection();
+  if (sel.anchorNode === sel.focusNode) {
+    return sel.anchorNode.parentElement.tagName.toUpperCase() === "A";
+  }
+  return false;
+};
+
 exports.execCommand_ = function(command, param) {
   document.execCommand(command, false, param);
 };

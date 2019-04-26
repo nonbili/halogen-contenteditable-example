@@ -28,6 +28,8 @@ getSelectionRect :: HTMLElement -> Effect (Maybe DOMRect)
 getSelectionRect el =
   (Nullable.toMaybe <<< unsafeCoerce) <$> runEffectFn1 getSelectionRect_ el
 
+foreign import isSelectionLink :: Effect Boolean
+
 foreign import execCommand_ :: EffectFn2 String String Unit
 execCommand :: String -> String -> Effect Unit
 execCommand = runEffectFn2 execCommand_
@@ -182,17 +184,24 @@ handleAction = case _ of
       selectionRect <- H.liftEffect $ getSelectionRect el
       isBold <- H.liftEffect $ queryCommandState "bold"
       isItalic <- H.liftEffect $ queryCommandState "italic"
+      isLink <- H.liftEffect isSelectionLink
       H.modify_ $ _
         { selectionRect = selectionRect
         , isBold = isBold
         , isItalic = isItalic
+        , isLink = isLink
         }
 
   OnBold -> H.liftEffect $ execCommand "bold" ""
 
   OnItalic -> H.liftEffect $ execCommand "italic" ""
 
-  OnLink -> H.liftEffect $ execCommand "createLink" " "
+  OnLink -> do
+    state <- H.get
+    H.liftEffect do
+      if state.isLink
+        then execCommand "unlink" ""
+        else execCommand "createLink" " "
 
   OnClear -> H.liftEffect do
     execCommand "removeFormat" ""
